@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.UserMapper">
+    <select id="findUser" parameterType="com.wowdespacito.user_management.pojo.User" resultType="com.wowdespacito.user_management.pojo.User">
+        select * from data_user where
+        <if test="id != null">id = #{id} and</if>
+        <if test="username != null">username = #{username} and</if>
+        <if test="email != null">email = #{email} and</if>
+        <if test="role != null">role = #{role} and</if>
+        <if test="status != null">status = #{status} and</if>
+        1 = 1
+    </select>
+    <update id="updateUser" parameterType="com.wowdespacito.user_management.pojo.User">
+        update data_user set 
+        <if test="username != null">username = #{username},</if>
+        <if test="password != null">password = #{password},</if>
+        <if test="email != null">email = #{email},</if>
+        <if test="role != null">role = #{role},</if>
+        <if test="status != null">status = #{status},</if>
+        where id = #{id}
+    </update>
+</mapper>

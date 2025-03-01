@@ -36,5 +36,10 @@ public class LoginInterceptor implements HandlerInterceptor {
             return false;
         }
     }
+
+    @Override
+    public void afterCompletion(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler, Exception ex) throws Exception {
+        ThreadLocalUtil.remove();
+    }
     
 }

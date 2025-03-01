@@ -2,8 +2,8 @@ package com.wowdespacito.user_management.pojo;
 
 import java.time.LocalDateTime;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -41,7 +41,7 @@ public class User {
     /**
      * 用户角色
      */
-    private Integer role;
+    private Integer role = 0;
 
     /**
      * 用户状态
