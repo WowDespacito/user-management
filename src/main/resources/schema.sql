@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS data_user (
     role INT,
     status INT,
     create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     index index_username (username),
     index index_email (email)
 );

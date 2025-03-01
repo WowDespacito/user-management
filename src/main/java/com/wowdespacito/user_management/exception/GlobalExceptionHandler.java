@@ -8,7 +8,8 @@ import com.wowdespacito.user_management.pojo.Response;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
-    public Response<String> handleException(Exception e) {;
+    public Response<String> handleException(Exception e) {
+        System.out.println(e.getMessage());
         return Response.error(e.getMessage());
     }
 

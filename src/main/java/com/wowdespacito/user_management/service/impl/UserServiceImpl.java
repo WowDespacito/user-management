@@ -34,11 +34,20 @@ public class UserServiceImpl implements UserService {
         return userMapper.findUser(user);
     }
 
+    private User findUserByEmail(String email) {
+        User user = new User();
+        user.setEmail(email);
+        return userMapper.findUser(user);
+    }
+
     @Override
     public String login(String username, String password) throws Exception {
         User user = findUserByUsername(username);
-        if (user.equals(null)) {
-            throw new UserException("用户不存在");
+        if (user == null || user.equals(null)) {
+            user = findUserByEmail(username);
+            if (user == null || user.equals(null)) {
+                throw new UserException("用户不存在");
+            }
         }
         if (Md5Util.getMd5String(password).equals(user.getPassword())) {
             Map<String, Object> claims = new HashMap<>();
@@ -100,7 +109,7 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setId(id);
         user = userMapper.findUser(user);
-        if (user.equals(null)) {
+        if (user == null) {
             throw new UserException("用户不存在");
         }
         if (findUserByUsername(username) != null) {

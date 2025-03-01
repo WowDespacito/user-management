@@ -13,7 +13,7 @@ public class JWTUtil {
     public static String getToken(Map<String, Object> claims){
         return JWT.create()
                 .withClaim("claims", claims)
-                .withExpiresAt(new Date(System.currentTimeMillis()+60*60))
+                .withExpiresAt(new Date(System.currentTimeMillis()+1000*60*60))
                 .sign(Algorithm.HMAC256(KEY));
     }
 
