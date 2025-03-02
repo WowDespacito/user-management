@@ -9,7 +9,10 @@ import com.wowdespacito.user_management.pojo.Response;
 public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public Response<String> handleException(Exception e) {
-        System.out.println(e.getMessage());
+        System.out.println(
+            "Exception Class:"+e.getClass().getName()+"\n"+
+            "Exception Message:"+e.getMessage()
+            );
         return Response.error(e.getMessage());
     }
 

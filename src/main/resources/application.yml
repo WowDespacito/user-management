@@ -1,6 +1,11 @@
 server:
   port: 8080
 spring:
+    rabbitmq:
+        host: ${RABBITMQ_HOST}
+        port: ${RABBITMQ_PORT}
+        username: ${RABBITMQ_USER}
+        password: ${RABBITMQ_PASSWORD}
     application:
         name: user-management
     datasource:
