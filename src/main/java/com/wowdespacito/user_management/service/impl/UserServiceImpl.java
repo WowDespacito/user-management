@@ -95,14 +95,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean verifyToken(String token) throws MyException {
+    public boolean verifyToken(String token) {
         Map<String, Object> claims = JWTUtil.parseToken(token);
-        if (token.equals(stringRedisTemplate.opsForValue().get("User_"+claims.get("id").toString()))) {
+        Integer id =  (Integer)claims.get("id");
+        String username = (String) claims.get("username");
+        User tmpUser = new User();
+        tmpUser.setId(id);tmpUser.setUsername(username);
+        if (userMapper.findUser(tmpUser)!= null && !userMapper.findUser(tmpUser).equals(null)){
             return true;
-        
-       } else {
+        }else{
             return false;
-       }
+        }
     }
 
     @Override
