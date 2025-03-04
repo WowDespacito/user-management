@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
+import com.wowdespacito.user_management.exception.MyException;
 import com.wowdespacito.user_management.exception.UserException;
 import com.wowdespacito.user_management.mapper.UserMapper;
 import com.wowdespacito.user_management.pojo.User;
@@ -41,7 +42,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String login(String username, String password) throws Exception {
+    public String login(String username, String password) throws MyException {
         User user = findUserByUsername(username);
         if (user == null || user.equals(null)) {
             user = findUserByEmail(username);
@@ -63,7 +64,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String register(String email, String password) throws Exception {
+    public String register(String email, String password) throws MyException {
         User user = new User();
         user.setEmail(email);
         if (userMapper.findUser(user) == null) {
@@ -94,7 +95,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean verifyToken(String token) throws Exception {
+    public boolean verifyToken(String token) throws MyException {
         Map<String, Object> claims = JWTUtil.parseToken(token);
         if (token.equals(stringRedisTemplate.opsForValue().get("User_"+claims.get("id").toString()))) {
             return true;
@@ -105,7 +106,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String changeUsername(Integer id, String username) throws Exception {
+    public String changeUsername(Integer id, String username) throws MyException {
         User user = new User();
         user.setId(id);
         user = userMapper.findUser(user);
