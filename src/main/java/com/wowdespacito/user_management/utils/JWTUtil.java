@@ -2,6 +2,7 @@ package com.wowdespacito.user_management.utils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 
 import java.util.Date;
 import java.util.Map;
@@ -24,5 +25,17 @@ public class JWTUtil {
                 .verify(token)
                 .getClaim("claims")
                 .asMap();
+    }
+
+    public static boolean isExpired (String token){
+        try{
+            Date expiresAt = JWT.require(Algorithm.HMAC256(KEY))
+                                .build()
+                                .verify(token)
+                                .getExpiresAt(); 
+            return expiresAt.before(new Date());
+        }catch(JWTDecodeException e){
+            return true;
+        }
     }
 }

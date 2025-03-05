@@ -1,5 +1,7 @@
 package com.wowdespacito.user_management.exception;
 
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -21,8 +23,14 @@ public class GlobalExceptionHandler {
         return Response.error(e.getMessage());
     }
 
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public Response<String> handleMissingParams(MissingServletRequestParameterException ex) {
+        String name = ex.getParameterName();
+        return Response.error(name + " parameter is missing");
+    }
+
     /*
-     * 非业务报错，不返回错误具体信息
+     * 非业务报错，未知的异常返回系统错误
      */
     @ExceptionHandler(Exception.class)
     public Response<String> handleException(Exception e){
@@ -31,6 +39,6 @@ public class GlobalExceptionHandler {
             "Exception Message:"+e.getMessage()
             );
         e.printStackTrace();
-        return Response.error("系统错误");
+        return Response.error(StringUtils.hasLength(e.getMessage())? e.getMessage():"系统错误");
     }
 }

@@ -101,7 +101,10 @@ public class UserServiceImpl implements UserService {
         String username = (String) claims.get("username");
         User tmpUser = new User();
         tmpUser.setId(id);tmpUser.setUsername(username);
-        if (userMapper.findUser(tmpUser)!= null && !userMapper.findUser(tmpUser).equals(null)){
+        if (userMapper.findUser(tmpUser)!= null 
+        && !userMapper.findUser(tmpUser).equals(null)
+        && !JWTUtil.isExpired(token)
+        ){
             return true;
         }else{
             return false;
