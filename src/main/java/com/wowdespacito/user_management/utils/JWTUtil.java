@@ -3,6 +3,7 @@ package com.wowdespacito.user_management.utils;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 
 import java.util.Date;
 import java.util.Map;
@@ -19,23 +20,18 @@ public class JWTUtil {
     }
 
     //接收验证token，验证token，并返回业务数据
-    public static Map<String, Object> parseToken(String token){
-        return JWT.require(Algorithm.HMAC256(KEY))
-                .build()
-                .verify(token)
-                .getClaim("claims")
-                .asMap();
-    }
-
-    public static boolean isExpired (String token){
-        try{
-            Date expiresAt = JWT.require(Algorithm.HMAC256(KEY))
-                                .build()
-                                .verify(token)
-                                .getExpiresAt(); 
-            return expiresAt.before(new Date());
-        }catch(JWTDecodeException e){
-            return true;
+    public static Map<String, Object> parseToken(String token) throws Exception{
+        try {
+            return JWT.require(Algorithm.HMAC256(KEY))
+            .build()
+            .verify(token)
+            .getClaim("claims")
+            .asMap();
+        } catch (TokenExpiredException e){
+            throw e;
+        } catch (JWTDecodeException e){
+            throw new RuntimeException("Token解码异常");
         }
+
     }
 }

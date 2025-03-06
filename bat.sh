@@ -17,4 +17,4 @@ retry() {
     return 0
 }
  
-retry "git pull"
+retry "git push"

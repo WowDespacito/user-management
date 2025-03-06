@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.wowdespacito.user_management.exception.MyException;
 import com.wowdespacito.user_management.exception.UserException;
 import com.wowdespacito.user_management.mapper.UserMapper;
@@ -96,19 +97,29 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean verifyToken(String token) {
-        Map<String, Object> claims = JWTUtil.parseToken(token);
-        Integer id =  (Integer)claims.get("id");
-        String username = (String) claims.get("username");
-        User tmpUser = new User();
-        tmpUser.setId(id);tmpUser.setUsername(username);
-        if (userMapper.findUser(tmpUser)!= null 
-        && !userMapper.findUser(tmpUser).equals(null)
-        && !JWTUtil.isExpired(token)
-        ){
-            return true;
-        }else{
+        try {
+            Map<String, Object> claims = JWTUtil.parseToken(token);
+            Integer id =  (Integer)claims.get("id");
+            String username = (String) claims.get("username");
+            User tmpUser = new User();
+            tmpUser.setId(id);tmpUser.setUsername(username);
+            if (userMapper.findUser(tmpUser)!= null 
+            && !userMapper.findUser(tmpUser).equals(null)
+            ){
+                return true;
+            }else{
+                System.out.println("token错误");
+                return false;
+            }
+        } catch (TokenExpiredException e){
+            System.out.println("token过期");
+            return false;
+        } catch (Exception e){
+            e.printStackTrace();
             return false;
         }
+
+
     }
 
     @Override
