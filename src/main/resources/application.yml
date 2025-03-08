@@ -26,3 +26,14 @@ mybatis:
     configuration:
         map-underscore-to-camel-case: true
     mapper-locations: classpath:mappers/*.xml
+logging:
+    file:
+        name: ${LOG_NAME}
+    level:
+        root: ${ROOT_LOG_LEVEL}
+        com:
+            wowdespacito:
+                user_management: ${MY_BLOG_LOG_LEVEL}
+    pattern:
+        console: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %level - %msg%n"
+        file: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %level - %msg%n"

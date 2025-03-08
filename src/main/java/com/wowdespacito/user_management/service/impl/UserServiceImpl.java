@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -29,6 +31,8 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     private User findUserByUsername(String username) {
         User user = new User();
@@ -100,22 +104,25 @@ public class UserServiceImpl implements UserService {
         try {
             Map<String, Object> claims = JWTUtil.parseToken(token);
             Integer id =  (Integer)claims.get("id");
+            logger.debug("解析出用户id："+id.toString());
             String username = (String) claims.get("username");
+            logger.debug("解析出用户名："+username);
             User tmpUser = new User();
             tmpUser.setId(id);tmpUser.setUsername(username);
             if (userMapper.findUser(tmpUser)!= null 
             && !userMapper.findUser(tmpUser).equals(null)
             ){
+                logger.info("验证通过");
                 return true;
             }else{
-                System.out.println("token错误");
+                logger.info("token错误");
                 return false;
             }
         } catch (TokenExpiredException e){
-            System.out.println("token过期");
+            logger.info("token过期");
             return false;
         } catch (Exception e){
-            e.printStackTrace();
+            logger.error(e.getMessage());
             return false;
         }
 

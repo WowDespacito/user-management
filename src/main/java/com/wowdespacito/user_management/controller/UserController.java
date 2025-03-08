@@ -31,7 +31,7 @@ public class UserController {
         return Response.success(userService.register(email, password));
     }
 
-    @PostMapping("/virifyToken")
+    @PostMapping("/verifyToken")
     public Response<Boolean> verifyToken(@RequestParam @NotBlank String token) throws MyException {
         return Response.success(userService.verifyToken(token));
     }
